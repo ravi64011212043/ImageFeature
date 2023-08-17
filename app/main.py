@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 import base64
 import numpy as np
 import cv2
@@ -8,10 +8,11 @@ app = FastAPI()
 # def root():
 #     return {"message": "Rawiwan"}
 
-@app.post("/api/genhog")
-def HogDescriptor(pic: str):
-        
-        data_split_img = pic.split(',',1)
+@app.get("/api/genhog")
+async def HogDescriptor(pic: Request):
+        json = await pic.json()
+        image = json["img"]
+        data_split_img = image.split(',',1)
         img_string = data_split_img[1]
 
         decode_img_data = base64.b64decode(img_string)
